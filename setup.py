@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="gymnasium_trading",
     version="0.0.1",
-    install_requires=["gymnasium==0.26.0", "pygame==2.1.3"],
+    install_requires=["gymnasium==0.29.0", "pygame==2.5.0"],
     author='Alejandro Rioja Chocrón',
     author_email='archocron@gmail.com',
     url='https://github.com/archocron/gymnasium-trading',
