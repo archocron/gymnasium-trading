@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="gymnasium_trading",
-    version="0.0.2",
+    version="0.0.3",
     install_requires=["gymnasium==0.28.1", "pygame==2.5.0"],
     author='Alejandro Rioja Chocrón',
     author_email='archocron@gmail.com',
