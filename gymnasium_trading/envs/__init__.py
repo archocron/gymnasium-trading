@@ -1,1 +1,1 @@
-from gymnasium_trading.envs.gymnasium_trading import GymnasiumTradingEnv
+from gymnasium_trading.envs.gym_trading import GymnasiumTradingEnv
