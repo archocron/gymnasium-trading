@@ -3,8 +3,11 @@ from gymnasium import spaces
 import pygame
 import numpy as np
 
+# the environment class must inherit from abstract class gym.Env
+
 
 class GymnasiumTradingEnv(gym.Env):
+    # metada . There, you should specify the render-modes that are supported by your environment (e.g. "human", "rgb_array", "ansi") and the framerate
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 4}
 
     def __init__(self, render_mode=None, size=5):
@@ -13,12 +16,16 @@ class GymnasiumTradingEnv(gym.Env):
 
         # Observations are dictionaries with the agent's and the target's location.
         # Each location is encoded as an element of {0, ..., `size`}^2, i.e. MultiDiscrete([size, size]).
-        self.observation_space = spaces.Dict(
+        # This observation is a dict space with an agent being a box space of 2x1 dimension of ints from 0 to size-1 and target being the same as agent
+        '''self.observation_space = spaces.Dict(
             {
                 "agent": spaces.Box(0, size - 1, shape=(2,), dtype=int),
                 "target": spaces.Box(0, size - 1, shape=(2,), dtype=int),
             }
-        )
+        )'''
+        # Observation now is a Box space indicating where the agent is located
+        self.observation_space = spaces.Box(
+            0, size - 1, shape=(2,), dtype=int)
 
         # We have 4 actions, corresponding to "right", "up", "left", "down", "right"
         self.action_space = spaces.Discrete(4)
@@ -49,7 +56,8 @@ class GymnasiumTradingEnv(gym.Env):
         self.clock = None
 
     def _get_obs(self):
-        return {"agent": self._agent_location, "target": self._target_location}
+        # return {"agent": self._agent_location, "target": self._target_location}
+        return self._agent_location
 
     def _get_info(self):
         return {
@@ -60,16 +68,18 @@ class GymnasiumTradingEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
         # We need the following line to seed self.np_random
+        # For Custom environments, the first line of :meth:`reset` should be ``super().reset(seed=seed)`` which implements
+        # the seeding correctly.
         super().reset(seed=seed)
-
+        self._target_location = np.array([self.size-1, self.size-1], dtype=int)
         # Choose the agent's location uniformly at random
-        self._agent_location = self.np_random.integers(
-            0, self.size, size=2, dtype=int)
-
+        # self._agent_location = self.np_random.integers(
+        #    0, self.size, size=2, dtype=int)
+        self._agent_location = self._target_location
         # We will sample the target's location randomly until it does not coincide with the agent's location
-        self._target_location = self._agent_location
+        # self._target_location = self._agent_location
         while np.array_equal(self._target_location, self._agent_location):
-            self._target_location = self.np_random.integers(
+            self._agent_location = self.np_random.integers(
                 0, self.size, size=2, dtype=int
             )
 
